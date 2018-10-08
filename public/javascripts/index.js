@@ -67,8 +67,9 @@ $(function () {
         return;
       }
     },
-    'lineWrapping': true,
-    'autofocus': true
+    tabSize: 2,
+    lineWrapping: true,
+    autofocus: true
   });
   changeLoaderString('编辑器加载完成……');
   /*********************
@@ -180,7 +181,7 @@ $(function () {
       // $('#addImg').val('');
       var tempClass = getRandomID(userData.userID);
       var messageIDArr = []
-  
+
       $.each(files, function (index, val) {
         var objUrl = getObjectURL(val);
         var textAreaVal = '<img class="' + tempClass + '" src="' + objUrl + '"><article class="' + tempClass + 'imgLoading loading" style="width:100%;height:100%;position:absolute;top:0;left:0;background-color:#fff;"></article>';
@@ -195,7 +196,7 @@ $(function () {
           $(this).removeClass(tempClass);
           $('.showArea').scrollTop(_this.height());
         }
-        
+
       });
       uploadFiles(files, function (result) {
         var userDataTemp = JSON.parse(JSON.stringify(userData));
@@ -223,11 +224,11 @@ $(function () {
         }
         $("." + tempClass + 'imgLoading').remove()
       })
-      
+
     }
   })
   changeLoaderString('主界面监听器加载完成……');
-  
+
   /*****************
    * 以下是暂时被废弃的监听事件 *
    *****************/

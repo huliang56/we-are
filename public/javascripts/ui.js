@@ -92,7 +92,8 @@ $(function () {
     }
   });
   $(".codeView > a").click(function (event) {
-    editor.replaceSelection("##" + $(this).html() + "#\n\n" + "#" + $(this).html() + "##");
+    var key = $(this).html().toLowerCase();
+    editor.replaceSelection("##" + key + "#\n\n" + "#" + key + "##");
   });
   //左侧项目名称切换
   $('.left>ul').on('click', 'li', function (event) {
