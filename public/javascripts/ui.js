@@ -106,6 +106,7 @@ $(function () {
     }
     // $(this).children('b').addClass('bActive');
     // $(this).siblings().children('b').removeClass('bActive');
+    clearMessageFilter();
     var pID = $(this).attr('projectID');
     var _this = $(".showMess[projectID=" + pID + "]");
     _this.addClass('showClass').siblings('.showMess').removeClass('showClass');
@@ -472,10 +473,48 @@ $(function () {
           $showClass.attr('currentPage', currentPage);
           var h = parseInt(parseInt($showClass.height()) - preH)
           $showArea.scrollTop(h)
+
+          if ($('.btn-close-filter').is(':visible')) {
+            var userId = $('.btn-close-filter').attr('data-user-id');
+            userId && filterMessageByUserId(userId);
+          }
         }
       });
     }
   });
+
+  // 双击聊天区用户头像，仅显示该用户发的消息
+  $('.showArea').on('dblclick', '.userTx', function (e) {
+    var userId = $(this).attr('userid');
+    if ($('.btn-close-filter').is(':visible')) {
+      return false;
+    }
+    if (!$('.chatTab').find('.btn-close-filter').length) {
+      $('.showArea').before('<div class="btn-close-filter"><h3>查看指定用户聊天记录</h3><span>点击退出</span></div>')
+    }
+    $('.btn-close-filter').attr('data-user-id', userId).slideDown(300);
+    filterMessageByUserId(userId);
+  });
+  // 根据用户ID，隐藏当前对话中其他用户的消息
+  function filterMessageByUserId(userId) {
+    $('.showClass').find('.messageBlock').each(function(index, item) {
+      var $item = $(item);
+      if ($item.is(':visible') && userId !== $(item).find('.userTx').attr('userid')) {
+        $item.hide();
+      }
+    });
+  }
+  // 恢复显示所有用户的消息
+  $('.chatTab').on('click', '.btn-close-filter',function() {
+    clearMessageFilter();
+  });
+  function clearMessageFilter() {
+    $('.btn-close-filter').removeAttr('data-user-id').slideUp(300);
+    $('.showClass').find('.messageBlock').each(function(index, item) {
+      $(this).show();
+    });
+  }
+
   // 图片点击放大
   $(".showArea").on('click', '.messContent > img', function (e) {
     e.preventDefault();
@@ -637,7 +676,7 @@ $(function () {
     var filename = files[0].name
     var filesize = getFileSize(files[0].size)
     var messageID = randMessageID(userData.userID);
-    var text = '<i class="ico ico-' + fileextname + '">' + fileextname + '</i><div class="fileinfo"><p>' + filename + '</p><p>' + filesize + '<a tar="' + messageID + '" href="{downloadUrl}"  target="_blank">下载</a></p></div>'
+    var text = '<i class="ico ico-' + fileextname + '">' + fileextname + '</i><div class="fileinfo"><p title="' + filename + '">' + filename + '</p><p>' + filesize + '<a tar="' + messageID + '" href="{downloadUrl}"  target="_blank">下载</a></p></div>'
     var _this = $('.showMess[projectID="' + userData.projectTeam.groupID + '"]');
     userData['messageType'] = 'file';
     userData['message'] = text;
@@ -734,7 +773,7 @@ $(function () {
     var filename = pDom.children('.tabFileName').html();
     var filesize = pDom.children('.tabFileSize').html();
     var fileurl = pDom.children('.TabFileUrl').children('a').attr('href');
-    var text = '<i class="ico ico-' + fileextname + '">' + fileextname + '</i><div class="fileinfo"><p>' + filename + '</p><p>' + filesize + '<a href="' + fileurl + '"  target="_blank">下载</a></p></div>'
+    var text = '<i class="ico ico-' + fileextname + '">' + fileextname + '</i><div class="fileinfo"><p  title="' + filename + '">' + filename + '</p><p>' + filesize + '<a href="' + fileurl + '"  target="_blank">下载</a></p></div>'
     userData['message'] = text;
     userData['fileCheck'] = true;
     userData['fileName'] = filename;

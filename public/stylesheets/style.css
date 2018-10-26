@@ -129,6 +129,25 @@ pre {
 .loading {
     opacity: .6;
 }
+.chatTab .btn-close-filter{
+    position: absolute;
+    z-index: 9;
+    display: none;
+    padding: 5px 0;
+    color: #008868;
+    text-align: center;
+    background: rgba(255, 127, 116, .5);
+    cursor: pointer;
+}
+.chatTab .btn-close-filter span{
+    position: absolute;
+    top: 0;
+    right: 15px;
+    color: #8c6561;
+    font-size: 11px;
+    line-height: 30px;
+    letter-spacing: 1px;
+}
 
 /**会话中链接字体**/
 
@@ -527,7 +546,9 @@ pre {
     height: 25px;
     line-height: 25px;
     text-indent: 10px;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .fileinfo > p > a {
